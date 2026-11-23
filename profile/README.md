@@ -1,4 +1,4 @@
-<img src="brand/banner.svg" width="100%" alt="Adaa Consulting — أداء للاستشارات. Institutional development starts from within."/>
+<img src="brand/hero.svg" width="100%" alt="Adaa Consulting — أداء للاستشارات. Institutional development starts from within."/>
 
 <p align="center">
   <a href="https://adaaconsulting.ae/"><img src="https://img.shields.io/badge/Website-adaaconsulting.ae-0047BB?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"/></a>
@@ -58,4 +58,4 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
 
 ---
 
-<a href="mailto:info@adaaconsulting.ae"><img src="brand/contact.svg" width="100%" alt="Ready to transform your organization? Email info@adaaconsulting.ae. Offices in Abu Dhabi, Dubai, Fujairah and Riyadh."/></a>
+<a href="mailto:info@adaaconsulting.ae"><img src="brand/cta.svg" width="100%" alt="Ready to transform your organization? Email info@adaaconsulting.ae. Offices in Abu Dhabi, Dubai, Fujairah and Riyadh."/></a>
