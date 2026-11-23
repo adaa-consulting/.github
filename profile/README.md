@@ -1,7 +1,7 @@
 <img src="assets/banner.svg" width="100%" alt="Adaa Consulting — أداء للاستشارات. Institutional development starts from within."/>
 
 <p align="center">
-  <a href="https://adaaconsulting.ae/"><img src="https://img.shields.io/badge/Website-adaaconsulting.ae-0e7490?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"/></a>
+  <a href="https://adaaconsulting.ae/"><img src="https://img.shields.io/badge/Website-adaaconsulting.ae-0047BB?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"/></a>
   <a href="https://www.linkedin.com/company/adaaconsulting/"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
   <a href="https://x.com/adaaconsulting"><img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white" alt="X"/></a>
   <a href="https://www.instagram.com/adaaconsulting/"><img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram"/></a>
