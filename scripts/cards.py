@@ -123,18 +123,79 @@ def logo(x, y, w, color):
     return f'<svg x="{x}" y="{y}" width="{w}" height="{w * .75}" viewBox="0 0 800 600" color="{color}">{LOGO}</svg>'
 
 
+BANNER_CSS = """
+.in{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.15s}.d2{animation-delay:.35s}.d3{animation-delay:.55s}.d4{animation-delay:.75s}.d5{animation-delay:.95s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.line{stroke-dasharray:120;animation:draw 1.1s .6s cubic-bezier(.6,0,.2,1) both}
+@keyframes draw{from{stroke-dashoffset:120}to{stroke-dashoffset:0}}
+.spin,.spin-r,.pulse,.logo{transform-box:fill-box;transform-origin:center}
+.spin{animation:spin 48s linear infinite}.spin-r{animation:spin 70s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pulse{animation:pulse 4.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.55;transform:scale(.94)}50%{opacity:.95;transform:scale(1.04)}}
+.logo{animation:pop 1.2s .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.sweep{animation:sweep 9s 1.5s ease-in-out infinite}
+@keyframes sweep{0%{transform:translateX(-420px)}45%,100%{transform:translateX(1100px)}}
+.p{animation:float 9s ease-in-out infinite}
+@keyframes float{0%{opacity:0;transform:translateY(0)}25%{opacity:.9}100%{opacity:0;transform:translateY(-70px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+"""
+
+
 def banner():
-    h = 240
+    h, cx, cy = 280, 690, 140
+    # logo glyphs occupy x 152-652, y 192-404 of the traced 800x600 canvas: crop to them
+    logo_w = 118
+    logo_h = logo_w * 212 / 500
+    particles = "".join(
+        f'<circle class="p" cx="{px}" cy="{py}" r="{r}" fill="{c}" style="animation-delay:{dl}s;animation-duration:{du}s"/>'
+        for px, py, r, c, dl, du in [(470, 250, 1.6, GOLD, 0, 9), (540, 230, 1.2, "#7aa2ff", 2.5, 11), (610, 260, 1.8, GOLD, 4, 10),
+                                     (780, 240, 1.3, "#7aa2ff", 1.2, 12), (820, 200, 1.5, GOLD, 6, 9), (430, 180, 1.1, "#7aa2ff", 3.5, 13),
+                                     (360, 255, 1.4, GOLD, 7, 11), (760, 70, 1.2, GOLD, 5, 10)])
+    orbit = lambda r, n, col, cls: (f'<g class="{cls}"><circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{col}" '
+                                    f'stroke-opacity=".45" stroke-width="1" stroke-dasharray="2 7"/>'
+                                    + "".join(f'<circle cx="{cx + r * c}" cy="{cy + r * s}" r="2.6" fill="{col}"/>'
+                                              for c, s in n) + "</g>")
     body = [
-        f'<rect width="{W}" height="{h}" rx="14" fill="{CHARCOAL}"/>',
-        f'<path d="M{W - 260} 0 H{W - 14} a14 14 0 0 1 14 14 V{h - 14} a14 14 0 0 1 -14 14 H{W - 420} Z" fill="{BLUE}"/>',
-        f'<path d="M{W - 300} 0 L{W - 460} {h}" stroke="{GOLD}" stroke-width="3"/>',
-        "".join(f'<path d="M40 {84 + i * 26} l18 -8" stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>' for i in range(4)),
-        logo(W - 250, 30, 240, "#ffffff"),
-        f'<text x="90" y="100" font-size="40" font-weight="800" fill="#ffffff">Adaa Consulting</text>',
-        f'<text x="90" y="140" font-size="25" font-weight="700" fill="{GOLD}">أداء للاستشارات</text>',
-        f'<text x="90" y="178" font-size="16" fill="#e5e5e5">Institutional development starts from within</text>',
-        f'<text x="90" y="206" font-size="15" fill="#c4c4c4">التطوير المؤسسي يبدأ من الداخل</text>',
+        f'<defs><style>{BANNER_CSS}</style>'
+        f'<clipPath id="card"><rect width="{W}" height="{h}" rx="18"/></clipPath>'
+        f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#070d1a"/>'
+        f'<stop offset=".55" stop-color="#0b1a38"/><stop offset="1" stop-color="#0a2a6b"/></linearGradient>'
+        f'<radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#2f6bff" stop-opacity=".75"/>'
+        f'<stop offset=".6" stop-color="{BLUE}" stop-opacity=".18"/><stop offset="1" stop-color="{BLUE}" stop-opacity="0"/></radialGradient>'
+        f'<linearGradient id="shine" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
+        f'<stop offset=".5" stop-color="#fff" stop-opacity=".07"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+        f'<linearGradient id="goldtext" x1="0" x2="1"><stop offset="0" stop-color="#e9e2c6"/><stop offset="1" stop-color="{GOLD}"/></linearGradient>'
+        f'<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#9db4ff" fill-opacity=".16"/></pattern>'
+        f'<linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
+        f'<stop offset=".45" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient>'
+        f'<mask id="dotmask"><rect width="{W}" height="{h}" fill="url(#fade)"/></mask></defs>',
+        '<g clip-path="url(#card)">',
+        f'<rect width="{W}" height="{h}" fill="url(#bg)"/>',
+        f'<rect width="{W}" height="{h}" fill="url(#dots)" mask="url(#dotmask)"/>',
+        f'<circle class="pulse" cx="{cx}" cy="{cy}" r="170" fill="url(#glow)"/>',
+        f'<g class="sweep"><rect x="-200" y="-40" width="160" height="{h + 80}" fill="url(#shine)" transform="skewX(-18)"/></g>',
+        particles,
+        # thin gold frame line along the bottom
+        f'<rect x="0" y="{h - 3}" width="{W}" height="3" fill="url(#goldtext)" opacity=".9"/>',
+        '</g>',
+        f'<rect x=".5" y=".5" width="{W - 1}" height="{h - 1}" rx="18" fill="none" stroke="#ffffff" stroke-opacity=".08"/>',
+        # logo emblem: glass disc, rotating rings with orbiting dots, crisp vector logo
+        orbit(112, [(1, 0), (-.5, .866), (-.5, -.866)], GOLD, "spin"),
+        orbit(90, [(0, 1), (0, -1)], "#7aa2ff", "spin-r"),
+        f'<circle cx="{cx}" cy="{cy}" r="70" fill="#ffffff" fill-opacity=".06" stroke="#ffffff" stroke-opacity=".18"/>',
+        f'<g class="logo"><svg x="{cx - logo_w / 2}" y="{cy - logo_h / 2}" width="{logo_w}" height="{logo_h}" '
+        f'viewBox="152 192 500 212" color="#ffffff">{LOGO}</svg></g>',
+        # text block
+        f'<text class="in d1" x="48" y="72" font-size="11.5" font-weight="700" letter-spacing="2.6" fill="{GOLD}">'
+        f'INSTITUTIONAL DEVELOPMENT  ·  DIGITAL SOLUTIONS</text>',
+        f'<text class="in d2" x="46" y="124" font-size="46" font-weight="800" fill="#ffffff">Adaa Consulting</text>',
+        f'<text class="in d3" x="48" y="164" font-size="27" font-weight="700" fill="url(#goldtext)">أداء للاستشارات</text>',
+        f'<line class="line" x1="48" y1="182" x2="168" y2="182" stroke="{GOLD}" stroke-width="2.5" stroke-linecap="round"/>',
+        f'<text class="in d4" x="48" y="212" font-size="16" fill="#d3dcf0">Institutional development starts from within</text>',
+        f'<text class="in d5" x="48" y="240" font-size="15" fill="#9fb0d4">التطوير المؤسسي يبدأ من الداخل</text>',
     ]
     return svg(h, "".join(body))
 
@@ -267,7 +328,7 @@ def contact():
 
 if __name__ == "__main__":
     out = HERE.parent / "profile" / "brand"
-    files = {"hero.svg": banner(), "cta.svg": contact()}
+    files = {"banner-animated.svg": banner(), "cta.svg": contact()}
     for theme, t in THEMES.items():
         files[f"solutions-{theme}.svg"] = products(t)
         files[f"consulting-{theme}.svg"] = clients(t)
