@@ -136,6 +136,7 @@ BANNER_CSS = """
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 """
 PHOTO = base64.b64encode((HERE / "hero-photo.jpg").read_bytes()).decode()  # Adaa's own hero image from adaaconsulting.ae
+ADAA_LOGO = base64.b64encode((HERE / "adaa-logo-color.png").read_bytes()).decode()  # official colour logo (training-platform repo), unaltered
 
 
 def banner():
@@ -144,7 +145,7 @@ def banner():
     h = 300
     right = W - 44
     slashes = "".join(
-        f'<path class="slash" style="animation-delay:{.15 + i * .12:.2f}s" d="M34 {104 + i * 30} l20 -9" '
+        f'<path class="slash" style="animation-delay:{.15 + i * .12:.2f}s" d="M34 {124 + i * 28} l20 -9" '
         f'stroke="{GOLD}" stroke-width="5" stroke-linecap="round"/>' for i in range(4))
     btn_w, btn_x, btn_y = 214, right - 214, 222
     body = [
@@ -153,14 +154,18 @@ def banner():
         f'<clipPath id="btn"><rect x="{btn_x}" y="{btn_y}" width="{btn_w}" height="44" rx="8"/></clipPath>'
         f'<linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="{CHARCOAL}" stop-opacity=".5"/>'
         f'<stop offset=".42" stop-color="{CHARCOAL}" stop-opacity=".82"/><stop offset="1" stop-color="{CHARCOAL}" stop-opacity=".93"/></linearGradient>'
+        f'<radialGradient id="corner" cx="0" cy="0" r="1"><stop offset="0" stop-color="{CHARCOAL}" stop-opacity=".9"/>'
+        f'<stop offset="1" stop-color="{CHARCOAL}" stop-opacity="0"/></radialGradient>'
         f'<linearGradient id="gloss" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
         f'<stop offset=".5" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>',
         '<g clip-path="url(#card)">',
         f'<rect width="{W}" height="{h}" fill="{CHARCOAL}"/>',
         f'<image class="photo" width="{W}" height="{h}" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,{PHOTO}"/>',
         f'<rect width="{W}" height="{h}" fill="url(#shade)"/>',
+        f'<rect width="420" height="230" fill="url(#corner)"/>',
         f'<rect y="{h - 4}" width="{W}" height="4" fill="{BLUE}"/>',
         '</g>',
+        f'<image class="in d1" x="30" y="26" width="196" height="{196 * 225 / 760:.1f}" href="data:image/png;base64,{ADAA_LOGO}"/>',
         slashes,
         logo(right - 118, 10, 124, "#ffffff"),
         f'<text class="in d1" x="{right}" y="132" text-anchor="end" font-size="38" font-weight="700" fill="#ffffff">التطوير المؤسسي يبدأ من الداخل</text>',
@@ -303,7 +308,7 @@ def contact():
 
 if __name__ == "__main__":
     out = HERE.parent / "profile" / "brand"
-    files = {"adaa-hero.svg": banner(), "cta.svg": contact()}
+    files = {"adaa-hero-v2.svg": banner(), "cta.svg": contact()}
     for theme, t in THEMES.items():
         files[f"solutions-{theme}.svg"] = products(t)
         files[f"consulting-{theme}.svg"] = clients(t)
