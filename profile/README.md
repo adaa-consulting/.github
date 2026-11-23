@@ -22,11 +22,16 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
   <img src="brand/products-light.svg" width="100%" alt="Digital solutions: Correspondence Management; Single Sign-On and UAE Pass; Strategy Management; Meetings and AI Minutes with Arabic speech-to-text; Complaints Management (ISO 10002); Finance and Assets; Digital Portals and Media; Mobile Apps."/>
 </picture>
 
-### Who We Work With
+### Our Technology Clients
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/it-clients-dark.svg"/>
+  <img src="brand/it-clients-light.svg" width="100%" alt="Technology clients: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority, Fujairah Foundation for Regions Development, Human Resources Department – Government of Fujairah, Al Badr Initiative, Fujairah Equestrian Championships."/>
+</picture>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="brand/clients-dark.svg"/>
-  <img src="brand/clients-light.svg" width="100%" alt="Digital solutions delivered for: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority. Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
+  <img src="brand/clients-light.svg" width="100%" alt="Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
 </picture>
 
 ### Consulting Expertise

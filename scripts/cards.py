@@ -31,12 +31,16 @@ PRODUCTS = [  # (English name, Arabic name, description, tech)
      ["React Native", "Flutter"]),
 ]
 
-GOV_CLIENTS = [
-    "Crown Prince's Office – Fujairah",
-    "Fujairah Government Excellence Program",
-    "Fujairah Chamber of Commerce & Industry",
-    "Fujairah Customs Department",
-    "Fujairah Tourism & Antiquities Authority",
+IT_CLIENTS = [  # (key = logo file prefix in scripts/clients/, English, Arabic)
+    ("1-cpo", "Crown Prince's Office – Fujairah", "مكتب سمو ولي عهد الفجيرة"),
+    ("2-fgep", "Fujairah Government Excellence Program", "برنامج الفجيرة للتميز الحكومي"),
+    ("3-fcci", "Fujairah Chamber of Commerce & Industry", "غرفة تجارة وصناعة الفجيرة"),
+    ("4-customs", "Fujairah Customs Department", "دائرة جمارك الفجيرة"),
+    ("5-tourism", "Fujairah Tourism & Antiquities Authority", "هيئة الفجيرة للسياحة والآثار"),
+    ("6-ffrd", "Fujairah Foundation for Regions Development", "مؤسسة الفجيرة لتنمية المناطق"),
+    ("7-hr", "Human Resources Department – Fujairah", "دائرة الموارد البشرية - الفجيرة"),
+    ("8-albadr", "Al Badr Initiative", "مبادرة البدر"),
+    ("9-equestrian", "Fujairah Equestrian Championships", "بطولات الفجيرة للفروسية"),
 ]
 CONSULTING_CLIENTS = [
     "Dubai Electricity & Water Authority", "Dubai Municipality", "Ministry of Interior",
@@ -155,16 +159,45 @@ def products(t):
     return svg(h, "".join(body))
 
 
+MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp"}
+
+
+def logo_data(key):
+    files = [f for f in (HERE / "clients").glob(key + ".*") if f.suffix.lower() in MIME]
+    if not files:
+        return None
+    f = files[0]
+    return f"data:{MIME[f.suffix.lower()]};base64," + base64.b64encode(f.read_bytes()).decode()
+
+
+def it_clients(t):
+    cols, gap, th = 3, 14, 168
+    cw = (W - gap * (cols - 1)) // cols
+    rows = -(-len(IT_CLIENTS) // cols)
+    h = rows * th + (rows - 1) * gap + 2
+    body = []
+    for i, (key, en, ar) in enumerate(IT_CLIENTS):
+        x = 1 + (i % cols) * (cw + gap)
+        y = 1 + (i // cols) * (th + gap)
+        # logo tiles stay white in both themes: client logos are designed for a light background
+        body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{th}" rx="12" fill="#ffffff" stroke="{t["border"]}"/>')
+        data = logo_data(key)
+        if data:
+            body.append(f'<image x="{x + 20}" y="{y + 14}" width="{cw - 42}" height="84" preserveAspectRatio="xMidYMid meet" href="{data}"/>')
+        else:  # shortcut: text fallback when a logo file is missing; add scripts/clients/<key>.png to fix
+            body.append(f'<text x="{x + cw / 2}" y="{y + 64}" text-anchor="middle" font-size="22" font-weight="800" fill="{BLUE}">{esc(ar)}</text>')
+        body.append(f'<line x1="{x + 24}" y1="{y + 110}" x2="{x + cw - 26}" y2="{y + 110}" stroke="#ececec"/>')
+        body.append(f'<text x="{x + cw / 2}" y="{y + 132}" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">{esc(en)}</text>')
+        body.append(f'<text x="{x + cw / 2}" y="{y + 153}" text-anchor="middle" font-size="12" font-weight="600" fill="{BLUE}">{esc(ar)}</text>')
+    return svg(h, "".join(body))
+
+
 def clients(t):
-    body, y = [], 0
-    for title, ar, names, strong in (("Digital solutions delivered for", "حلول رقمية لـ", GOV_CLIENTS, True),
-                                     ("Consulting clients", "عملاء الاستشارات", CONSULTING_CLIENTS, False)):
-        body.append(f'<text x="2" y="{y + 16}" font-size="15" font-weight="700" fill="{t["blue"]}">{title}</text>')
-        body.append(f'<text x="{W - 2}" y="{y + 16}" text-anchor="end" font-size="15" font-weight="700" fill="{t["blue"]}">{esc(ar)}</text>')
-        s, y = chip_rows(t, 1, y + 30, names, W - 1, strong)
-        body.append(s)
-        y += 30
-    return svg(y - 26, "".join(body))
+    body = [f'<text x="2" y="16" font-size="15" font-weight="700" fill="{t["blue"]}">Consulting clients</text>',
+            f'<text x="{W - 2}" y="16" text-anchor="end" font-size="15" font-weight="700" fill="{t["blue"]}">عملاء الاستشارات</text>']
+    s, y = chip_rows(t, 1, 30, CONSULTING_CLIENTS, W - 1)
+    body.append(s)
+    return svg(y + 2, "".join(body))
 
 
 def services(t):
@@ -204,6 +237,7 @@ if __name__ == "__main__":
     for theme, t in THEMES.items():
         files[f"products-{theme}.svg"] = products(t)
         files[f"clients-{theme}.svg"] = clients(t)
+        files[f"it-clients-{theme}.svg"] = it_clients(t)
         files[f"services-{theme}.svg"] = services(t)
     for old in out.glob("*.svg"):
         old.unlink()
