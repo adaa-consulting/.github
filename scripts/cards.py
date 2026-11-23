@@ -303,7 +303,7 @@ def contact():
 
 if __name__ == "__main__":
     out = HERE.parent / "profile" / "brand"
-    files = {"banner-animated.svg": banner(), "cta.svg": contact()}
+    files = {"adaa-hero.svg": banner(), "cta.svg": contact()}
     for theme, t in THEMES.items():
         files[f"solutions-{theme}.svg"] = products(t)
         files[f"consulting-{theme}.svg"] = clients(t)
