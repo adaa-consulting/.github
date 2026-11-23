@@ -1,4 +1,4 @@
-<img src="brand/adaa-hero-v2.svg" width="100%" alt="Adaa Consulting — أداء للاستشارات. Institutional development starts from within."/>
+<img src="brand/adaa-hero-v3.svg" width="100%" alt="Adaa Consulting — أداء للاستشارات. Institutional development starts from within."/>
 
 <p align="center">
   <a href="https://adaaconsulting.ae/"><img src="https://img.shields.io/badge/Website-adaaconsulting.ae-0047BB?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"/></a>

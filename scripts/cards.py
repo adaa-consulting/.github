@@ -167,7 +167,6 @@ def banner():
         '</g>',
         f'<image class="in d1" x="30" y="26" width="196" height="{196 * 225 / 760:.1f}" href="data:image/png;base64,{ADAA_LOGO}"/>',
         slashes,
-        logo(right - 118, 10, 124, "#ffffff"),
         f'<text class="in d1" x="{right}" y="132" text-anchor="end" font-size="38" font-weight="700" fill="#ffffff">التطوير المؤسسي يبدأ من الداخل</text>',
         f'<text class="in d2" x="{right}" y="168" text-anchor="end" font-size="18" fill="#f5f5f5">حلول استشارية مبتكرة تعتمد على المعرفة والتجربة</text>',
         f'<text class="in d3" x="{right}" y="200" text-anchor="end" font-size="14" font-weight="600" fill="{GOLD}" letter-spacing=".4">'
@@ -308,7 +307,7 @@ def contact():
 
 if __name__ == "__main__":
     out = HERE.parent / "profile" / "brand"
-    files = {"adaa-hero-v2.svg": banner(), "cta.svg": contact()}
+    files = {"adaa-hero-v3.svg": banner(), "cta.svg": contact()}
     for theme, t in THEMES.items():
         files[f"solutions-{theme}.svg"] = products(t)
         files[f"consulting-{theme}.svg"] = clients(t)
