@@ -237,7 +237,7 @@ if __name__ == "__main__":
     for theme, t in THEMES.items():
         files[f"products-{theme}.svg"] = products(t)
         files[f"consulting-{theme}.svg"] = clients(t)
-        files[f"it-clients-{theme}.svg"] = it_clients(t)
+        files[f"client-logos-{theme}.svg"] = it_clients(t)
         files[f"services-{theme}.svg"] = services(t)
     for old in out.glob("*.svg"):
         old.unlink()
