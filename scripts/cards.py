@@ -1,6 +1,5 @@
 """Generate the SVG images for profile/README.md. Edit the data below, then run: python3 scripts/cards.py"""
 import base64
-import re
 from pathlib import Path
 from xml.dom import minidom
 from xml.sax.saxutils import escape
@@ -195,41 +194,13 @@ def products(t):
 MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp"}
 
 
-DARK_INK = "#ebebee"
-
-
-def _neutral_dark(hexcol):
-    h = hexcol.lstrip("#")
-    if len(h) == 3:
-        h = "".join(c * 2 for c in h)
-    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
-    return max(r, g, b) - min(r, g, b) < 45 and 0.299 * r + 0.587 * g + 0.114 * b < 140
-
-
-def darken_svg(text):
-    """Dark-mode logo: black/grey ink becomes light, brand colours stay as they are."""
-    text = re.sub(r"#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b",
-                  lambda m: DARK_INK if _neutral_dark(m.group()) else m.group(), text)
-    text = re.sub(r'((?:fill|stroke)\s*[=:]\s*"?)black\b', r"\g<1>" + DARK_INK, text)
-    # shapes with no fill default to black: give the root a light default fill (unless it sets its own)
-    root = re.search(r"<svg\b[^>]*>", text)
-    if root and not re.search(r"\sfill\s*=", root.group()):
-        text = text[:root.start()] + f'<svg fill="{DARK_INK}"' + text[root.start() + 4:]
-    minidom.parseString(text.encode("utf-8"))  # self-check: a broken logo SVG renders as a broken-image icon
-    return text
-
-
-def logo_data(key, dark=False):
+def logo_data(key):
+    """Client logos are embedded exactly as published by the client: never recolour or edit them."""
     files = sorted(f for f in (HERE / "clients").glob(key + ".*") if f.suffix.lower() in MIME)
-    plain = [f for f in files if ".dark." not in f.name]
-    variant = [f for f in files if ".dark." in f.name]  # pre-built dark version (e.g. 5-tourism.dark.png) wins
-    f = (variant or plain)[0] if dark and (variant or plain) else (plain[0] if plain else None)
-    if f is None:
+    if not files:
         return None
-    raw = f.read_bytes()
-    if dark and not variant and f.suffix.lower() == ".svg":
-        raw = darken_svg(raw.decode("utf-8")).encode("utf-8")
-    return f"data:{MIME[f.suffix.lower()]};base64," + base64.b64encode(raw).decode()
+    f = files[0]
+    return f"data:{MIME[f.suffix.lower()]};base64," + base64.b64encode(f.read_bytes()).decode()
 
 
 def it_clients(t, dark):
@@ -242,7 +213,9 @@ def it_clients(t, dark):
         x = 1 + (i % cols) * (cw + gap)
         y = 1 + (i // cols) * (th + gap)
         body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{th}" rx="14" fill="{t["card"]}" stroke="{t["border"]}"/>')
-        data = logo_data(key, dark)
+        data = logo_data(key)
+        if dark:  # soft light plate behind the untouched logo so dark ink in logos stays readable
+            body.append(f'<rect x="{x + 12}" y="{y + 10}" width="{cw - 26}" height="92" rx="10" fill="#ffffff"/>')
         if data:
             body.append(f'<image x="{x + 22}" y="{y + 16}" width="{cw - 46}" height="80" preserveAspectRatio="xMidYMid meet" href="{data}"/>')
         else:  # shortcut: text fallback when a logo file is missing; add scripts/clients/<key>.png to fix
@@ -298,7 +271,7 @@ if __name__ == "__main__":
     for theme, t in THEMES.items():
         files[f"solutions-{theme}.svg"] = products(t)
         files[f"consulting-{theme}.svg"] = clients(t)
-        files[f"client-wall-{theme}.svg"] = it_clients(t, theme == "dark")
+        files[f"client-tiles-{theme}.svg"] = it_clients(t, theme == "dark")
         files[f"services-{theme}.svg"] = services(t)
     for old in out.glob("*.svg"):
         old.unlink()
