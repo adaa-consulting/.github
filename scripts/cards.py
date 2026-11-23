@@ -194,7 +194,7 @@ def contact():
 
 
 if __name__ == "__main__":
-    out = Path(__file__).resolve().parent.parent / "profile" / "assets"
+    out = Path(__file__).resolve().parent.parent / "profile" / "brand"
     for name, content in (("banner.svg", banner()), ("products.svg", products()),
                           ("clients.svg", clients()), ("services.svg", services()), ("contact.svg", contact())):
         minidom.parseString(content)  # self-check: invalid XML (e.g. a bare &) silently breaks the image on GitHub

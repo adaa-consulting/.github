@@ -1,4 +1,4 @@
-<img src="assets/banner.svg" width="100%" alt="Adaa Consulting — أداء للاستشارات. Institutional development starts from within."/>
+<img src="brand/banner.svg" width="100%" alt="Adaa Consulting — أداء للاستشارات. Institutional development starts from within."/>
 
 <p align="center">
   <a href="https://adaaconsulting.ae/"><img src="https://img.shields.io/badge/Website-adaaconsulting.ae-0047BB?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"/></a>
@@ -17,15 +17,15 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
 
 ### What We Build
 
-<img src="assets/products.svg" width="100%" alt="Digital solutions: Correspondence Management; Single Sign-On and UAE Pass; Strategy Management; Meetings and AI Minutes with Arabic speech-to-text; Complaints Management (ISO 10002); Finance and Assets; Digital Portals and Media; Mobile Apps."/>
+<img src="brand/products.svg" width="100%" alt="Digital solutions: Correspondence Management; Single Sign-On and UAE Pass; Strategy Management; Meetings and AI Minutes with Arabic speech-to-text; Complaints Management (ISO 10002); Finance and Assets; Digital Portals and Media; Mobile Apps."/>
 
 ### Who We Work With
 
-<img src="assets/clients.svg" width="100%" alt="Digital solutions delivered for: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority. Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
+<img src="brand/clients.svg" width="100%" alt="Digital solutions delivered for: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority. Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
 
 ### Consulting Expertise
 
-<img src="assets/services.svg" width="100%" alt="Consulting services: Institutional Excellence, Strategic Planning, Human Resources, Institutional Development, Customer Experience, Operational Efficiency, Risk and Governance, Innovation, Standards and ISO Systems, Digital Transformation and AI."/>
+<img src="brand/services.svg" width="100%" alt="Consulting services: Institutional Excellence, Strategic Planning, Human Resources, Institutional Development, Customer Experience, Operational Efficiency, Risk and Governance, Innovation, Standards and ISO Systems, Digital Transformation and AI."/>
 
 ### Technology
 
@@ -49,4 +49,4 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
 
 ---
 
-<a href="mailto:info@adaaconsulting.ae"><img src="assets/contact.svg" width="100%" alt="Ready to transform your organization? Email info@adaaconsulting.ae. Offices in Abu Dhabi, Dubai, Fujairah and Riyadh."/></a>
+<a href="mailto:info@adaaconsulting.ae"><img src="brand/contact.svg" width="100%" alt="Ready to transform your organization? Email info@adaaconsulting.ae. Offices in Abu Dhabi, Dubai, Fujairah and Riyadh."/></a>
