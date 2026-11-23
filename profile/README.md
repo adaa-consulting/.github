@@ -18,15 +18,15 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
 ### What We Build
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="brand/products-dark.svg"/>
-  <img src="brand/products-light.svg" width="100%" alt="Digital solutions: Correspondence Management; Single Sign-On and UAE Pass; Strategy Management; Meetings and AI Minutes with Arabic speech-to-text; Complaints Management (ISO 10002); Finance and Assets; Digital Portals and Media; Mobile Apps."/>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/solutions-dark.svg"/>
+  <img src="brand/solutions-light.svg" width="100%" alt="Digital solutions: Correspondence Management; Single Sign-On and UAE Pass; Strategy Management; Meetings and AI Minutes with Arabic speech-to-text; Complaints Management (ISO 10002); Finance and Assets; Digital Portals and Media; Mobile Apps."/>
 </picture>
 
 ### Our Technology Clients
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="brand/client-logos-dark.svg"/>
-  <img src="brand/client-logos-light.svg" width="100%" alt="Technology clients: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority, Fujairah Foundation for Regions Development, Human Resources Department – Government of Fujairah, Al Badr Initiative, Fujairah Equestrian Championships."/>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/logos-dark.svg"/>
+  <img src="brand/logos-light.svg" width="100%" alt="Technology clients: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority, Fujairah Foundation for Regions Development, Human Resources Department – Government of Fujairah, Al Badr Initiative, Fujairah Equestrian Championships."/>
 </picture>
 
 <picture>

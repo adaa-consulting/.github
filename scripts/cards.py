@@ -73,9 +73,9 @@ LOGO = (HERE / "logo.svg").read_text()  # traced from the official logo-white.pn
 BLUE, GOLD, CHARCOAL = "#0047BB", "#B6B098", "#2f2f2f"
 THEMES = {
     "light": dict(card="#ffffff", border="#c9d6f2", text="#333333", muted="#666666", blue=BLUE, gold=GOLD,
-                  chip_strong="#e8effb", chip="#ffffff"),
+                  chip_strong="#e8effb", chip="#ffffff", chip_soft="#eef2f9"),
     "dark": dict(card="#1b1f27", border="#2c3a57", text="#f0f0f0", muted="#a9adb4", blue="#6c9cff", gold=GOLD,
-                 chip_strong="#10224a", chip="#1b1f27"),
+                 chip_strong="#10224a", chip="#1b1f27", chip_soft="#242b38"),
 }
 
 
@@ -139,23 +139,55 @@ def banner():
     return svg(h, "".join(body))
 
 
+ICONS = [  # 24x24 line icons, one per product (same order as PRODUCTS)
+    '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+    '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+    '<path d="M3 21h18"/><rect x="5" y="11" width="3" height="7"/><rect x="10.5" y="5" width="3" height="13"/><rect x="16" y="13" width="3" height="5"/>',
+    '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>',
+    '<path d="M4 5h16v11H9l-5 4z"/><path d="M12 8v4M12 14.5v.01"/>',
+    '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14.5h2"/>',
+    '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/>',
+    '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+]
+assert len(ICONS) == len(PRODUCTS)
+
+GRADIENTS = (f'<linearGradient id="tile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{BLUE}"/>'
+             f'<stop offset="1" stop-color="#3b7cf0"/></linearGradient>'
+             f'<linearGradient id="accent" x1="0" x2="1"><stop offset="0" stop-color="{BLUE}"/>'
+             f'<stop offset="1" stop-color="{GOLD}"/></linearGradient>')
+
+
+def soft_chips(t, x, y, labels):
+    out = []
+    for label in labels:
+        w = int(len(label) * 6.3) + 20  # shortcut: width estimated from char count; fine for short Latin labels
+        out.append(f'<rect x="{x}" y="{y}" width="{w}" height="22" rx="6" fill="{t["chip_soft"]}"/>'
+                   f'<text x="{x + w / 2}" y="{y + 15}" text-anchor="middle" font-size="11.5" font-weight="600" fill="{t["muted"]}">{esc(label)}</text>')
+        x += w + 6
+    return "".join(out)
+
+
 def products(t):
-    cols, gap, ch = 2, 16, 152
+    cols, gap, ch = 2, 16, 182
     cw = (W - gap) // cols
     rows = (len(PRODUCTS) + 1) // cols
     h = rows * ch + (rows - 1) * gap + 2
-    body = []
+    body = [f'<defs>{GRADIENTS}</defs>']
     for i, (en, ar, desc, tech) in enumerate(PRODUCTS):
         x = 1 + (i % cols) * (cw + gap)
         y = 1 + (i // cols) * (ch + gap)
-        body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{ch}" rx="10" fill="{t["card"]}" stroke="{t["border"]}"/>')
-        body.append(f'<rect x="{x + 18}" y="{y + 18}" width="28" height="28" rx="7" fill="{t["gold"]}"/>'
-                    f'<text x="{x + 32}" y="{y + 37}" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">{i + 1:02d}</text>')
-        body.append(f'<text x="{x + 56}" y="{y + 38}" font-size="16" font-weight="700" fill="{t["text"]}">{esc(en)}</text>')
-        body.append(f'<text x="{x + cw - 20}" y="{y + 38}" text-anchor="end" font-size="14" font-weight="700" fill="{t["blue"]}">{esc(ar)}</text>')
-        for j, line in enumerate(wrap(desc, 56)[:2]):
-            body.append(f'<text x="{x + 18}" y="{y + 72 + j * 19}" font-size="13" fill="{t["muted"]}">{esc(line)}</text>')
-        body.append(chip_rows(t, x + 18, y + ch - 38, tech, x + cw - 20)[0])
+        body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{ch}" rx="14" fill="{t["card"]}" stroke="{t["border"]}"/>')
+        body.append(f'<rect x="{x + 20}" y="{y}" width="{cw - 42}" height="3" rx="1.5" fill="url(#accent)"/>')
+        body.append(f'<text x="{x + cw - 22}" y="{y + 52}" text-anchor="end" font-size="34" font-weight="800" fill="{t["muted"]}" fill-opacity=".16">{i + 1:02d}</text>')
+        body.append(f'<rect x="{x + 20}" y="{y + 24}" width="48" height="48" rx="12" fill="url(#tile)"/>'
+                    f'<g transform="translate({x + 32} {y + 36})" fill="none" stroke="#ffffff" stroke-width="1.8" '
+                    f'stroke-linecap="round" stroke-linejoin="round">{ICONS[i]}</g>')
+        body.append(f'<text x="{x + 84}" y="{y + 45}" font-size="17" font-weight="700" fill="{t["text"]}">{esc(en)}</text>')
+        body.append(f'<text x="{x + 84}" y="{y + 68}" font-size="14" font-weight="600" fill="{t["blue"]}">{esc(ar)}</text>')
+        for j, line in enumerate(wrap(desc, 58)[:2]):
+            body.append(f'<text x="{x + 20}" y="{y + 104 + j * 19}" font-size="13" fill="{t["muted"]}">{esc(line)}</text>')
+        body.append(f'<line x1="{x + 20}" y1="{y + ch - 46}" x2="{x + cw - 22}" y2="{y + ch - 46}" stroke="{t["border"]}" stroke-opacity=".6"/>')
+        body.append(soft_chips(t, x + 20, y + ch - 34, tech))
     return svg(h, "".join(body))
 
 
@@ -170,25 +202,27 @@ def logo_data(key):
     return f"data:{MIME[f.suffix.lower()]};base64," + base64.b64encode(f.read_bytes()).decode()
 
 
-def it_clients(t):
+def it_clients(t, dark):
     cols, gap, th = 3, 14, 168
     cw = (W - gap * (cols - 1)) // cols
     rows = -(-len(IT_CLIENTS) // cols)
     h = rows * th + (rows - 1) * gap + 2
-    body = []
+    # dark mode: logos drawn in one light tone (classic logo wall), since full-colour logos are made for white
+    body = ['<defs><filter id="mono"><feColorMatrix type="matrix" '
+            'values="0 0 0 0 .93  0 0 0 0 .93  0 0 0 0 .95  0 0 0 1 0"/></filter></defs>']
     for i, (key, en, ar) in enumerate(IT_CLIENTS):
         x = 1 + (i % cols) * (cw + gap)
         y = 1 + (i // cols) * (th + gap)
-        # logo tiles stay white in both themes: client logos are designed for a light background
-        body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{th}" rx="12" fill="#ffffff" stroke="{t["border"]}"/>')
+        body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{th}" rx="14" fill="{t["card"]}" stroke="{t["border"]}"/>')
         data = logo_data(key)
         if data:
-            body.append(f'<image x="{x + 20}" y="{y + 14}" width="{cw - 42}" height="84" preserveAspectRatio="xMidYMid meet" href="{data}"/>')
+            body.append(f'<image x="{x + 22}" y="{y + 16}" width="{cw - 46}" height="80" preserveAspectRatio="xMidYMid meet" '
+                        f'{"filter=\"url(#mono)\" " if dark else ""}href="{data}"/>')
         else:  # shortcut: text fallback when a logo file is missing; add scripts/clients/<key>.png to fix
-            body.append(f'<text x="{x + cw / 2}" y="{y + 64}" text-anchor="middle" font-size="17" font-weight="800" fill="{BLUE}">{esc(ar)}</text>')
-        body.append(f'<line x1="{x + 24}" y1="{y + 110}" x2="{x + cw - 26}" y2="{y + 110}" stroke="#ececec"/>')
-        body.append(f'<text x="{x + cw / 2}" y="{y + 132}" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">{esc(en)}</text>')
-        body.append(f'<text x="{x + cw / 2}" y="{y + 153}" text-anchor="middle" font-size="12" font-weight="600" fill="{BLUE}">{esc(ar)}</text>')
+            body.append(f'<text x="{x + cw / 2}" y="{y + 64}" text-anchor="middle" font-size="17" font-weight="800" fill="{t["blue"]}">{esc(ar)}</text>')
+        body.append(f'<line x1="{x + 24}" y1="{y + 110}" x2="{x + cw - 26}" y2="{y + 110}" stroke="{t["border"]}" stroke-opacity=".7"/>')
+        body.append(f'<text x="{x + cw / 2}" y="{y + 132}" text-anchor="middle" font-size="12" font-weight="700" fill="{t["text"]}">{esc(en)}</text>')
+        body.append(f'<text x="{x + cw / 2}" y="{y + 153}" text-anchor="middle" font-size="12" font-weight="600" fill="{t["blue"]}">{esc(ar)}</text>')
     return svg(h, "".join(body))
 
 
@@ -235,9 +269,9 @@ if __name__ == "__main__":
     out = HERE.parent / "profile" / "brand"
     files = {"hero.svg": banner(), "cta.svg": contact()}
     for theme, t in THEMES.items():
-        files[f"products-{theme}.svg"] = products(t)
+        files[f"solutions-{theme}.svg"] = products(t)
         files[f"consulting-{theme}.svg"] = clients(t)
-        files[f"client-logos-{theme}.svg"] = it_clients(t)
+        files[f"logos-{theme}.svg"] = it_clients(t, theme == "dark")
         files[f"services-{theme}.svg"] = services(t)
     for old in out.glob("*.svg"):
         old.unlink()
