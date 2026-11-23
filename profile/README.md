@@ -17,15 +17,24 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
 
 ### What We Build
 
-<img src="brand/products.svg" width="100%" alt="Digital solutions: Correspondence Management; Single Sign-On and UAE Pass; Strategy Management; Meetings and AI Minutes with Arabic speech-to-text; Complaints Management (ISO 10002); Finance and Assets; Digital Portals and Media; Mobile Apps."/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/products-dark.svg"/>
+  <img src="brand/products-light.svg" width="100%" alt="Digital solutions: Correspondence Management; Single Sign-On and UAE Pass; Strategy Management; Meetings and AI Minutes with Arabic speech-to-text; Complaints Management (ISO 10002); Finance and Assets; Digital Portals and Media; Mobile Apps."/>
+</picture>
 
 ### Who We Work With
 
-<img src="brand/clients.svg" width="100%" alt="Digital solutions delivered for: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority. Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/clients-dark.svg"/>
+  <img src="brand/clients-light.svg" width="100%" alt="Digital solutions delivered for: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority. Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
+</picture>
 
 ### Consulting Expertise
 
-<img src="brand/services.svg" width="100%" alt="Consulting services: Institutional Excellence, Strategic Planning, Human Resources, Institutional Development, Customer Experience, Operational Efficiency, Risk and Governance, Innovation, Standards and ISO Systems, Digital Transformation and AI."/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/services-dark.svg"/>
+  <img src="brand/services-light.svg" width="100%" alt="Consulting services: Institutional Excellence, Strategic Planning, Human Resources, Institutional Development, Customer Experience, Operational Efficiency, Risk and Governance, Innovation, Standards and ISO Systems, Digital Transformation and AI."/>
+</picture>
 
 ### Technology
 

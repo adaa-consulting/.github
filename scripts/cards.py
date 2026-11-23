@@ -57,11 +57,22 @@ SERVICES = [  # from adaaconsulting.ae
 ]
 
 W = 854
-FONT = "'JF Flat','Adaa',-apple-system,BlinkMacSystemFont,'Segoe UI','Geeza Pro','Noto Naskh Arabic',Tahoma,Helvetica,Arial,sans-serif"
-# Adaa brand, taken from adaaconsulting.ae: royal blue, sand-gold, charcoal, light grey + white cards
-PAGE, CARD, BORDER, TEXT, MUTED = "#f5f5f5", "#ffffff", "#c9d6f2", "#333333", "#666666"
+HERE = Path(__file__).resolve().parent
+# Cairo (SIL OFL, see Cairo-OFL.txt), subset to Latin + Arabic and embedded: images on GitHub cannot load web fonts
+CAIRO = base64.b64encode((HERE / "cairo.woff2").read_bytes()).decode()
+FONT_CSS = (f"<style>@font-face{{font-family:'Cairo';font-weight:400 800;"
+            f"src:url(data:font/woff2;base64,{CAIRO}) format('woff2')}}</style>")
+FONT = "Cairo,'Segoe UI',Tahoma,sans-serif"
+LOGO = (HERE / "logo.svg").read_text()  # traced from the official logo-white.png, so it stays sharp at any size
+
+# Adaa brand, taken from adaaconsulting.ae: royal blue #0047BB, sand-gold #B6B098, charcoal
 BLUE, GOLD, CHARCOAL = "#0047BB", "#B6B098", "#2f2f2f"
-LOGO = base64.b64encode((Path(__file__).resolve().parent / "logo-white.png").read_bytes()).decode()
+THEMES = {
+    "light": dict(card="#ffffff", border="#c9d6f2", text="#333333", muted="#666666", blue=BLUE, gold=GOLD,
+                  chip_strong="#e8effb", chip="#ffffff"),
+    "dark": dict(card="#1b1f27", border="#2c3a57", text="#f0f0f0", muted="#a9adb4", blue="#6c9cff", gold=GOLD,
+                 chip_strong="#10224a", chip="#1b1f27"),
+}
 
 
 def esc(s):
@@ -79,37 +90,33 @@ def wrap(text, n):
     return lines + [cur]
 
 
-def chip(x, y, label, strong=False):
-    w = int(len(label) * 6.6) + 20  # shortcut: width estimated from char count; fine for short Latin labels
-    fill, stroke, color = ("#e8effb", BLUE, BLUE) if strong else (CARD, GOLD, MUTED)
-    return w, (f'<rect x="{x}" y="{y}" width="{w}" height="22" rx="11" fill="{fill}" stroke="{stroke}"/>'
-               f'<text x="{x + w / 2}" y="{y + 15}" text-anchor="middle" font-size="12" fill="{color}">{esc(label)}</text>')
+def chip(t, x, y, label, strong=False):
+    w = int(len(label) * 6.4) + 22  # shortcut: width estimated from char count; fine for short Latin labels
+    fill, stroke, color = (t["chip_strong"], t["blue"], t["blue"]) if strong else (t["chip"], t["gold"], t["muted"])
+    return w, (f'<rect x="{x}" y="{y}" width="{w}" height="24" rx="12" fill="{fill}" stroke="{stroke}"/>'
+               f'<text x="{x + w / 2}" y="{y + 16.5}" text-anchor="middle" font-size="12" font-weight="600" fill="{color}">{esc(label)}</text>')
 
 
-def chip_rows(x0, y, labels, max_x, strong=False):
+def chip_rows(t, x0, y, labels, max_x, strong=False):
     """Lay chips left-to-right, wrapping to a new row; returns (svg, bottom y)."""
     out, x = [], x0
     for label in labels:
-        w, _ = chip(0, 0, label, strong)
+        w, _ = chip(t, 0, 0, label, strong)
         if x + w > max_x:
-            x, y = x0, y + 30
-        out.append(chip(x, y, label, strong)[1])
+            x, y = x0, y + 32
+        out.append(chip(t, x, y, label, strong)[1])
         x += w + 8
-    return "".join(out), y + 22
+    return "".join(out), y + 24
 
 
 def svg(h, body):
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{W}" height="{h}" '
-            f'viewBox="0 0 {W} {h}" font-family="{FONT}">{body}</svg>')
+    # no page background: the image is transparent so it sits on GitHub's own light or dark page
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{h}" viewBox="0 0 {W} {h}" '
+            f'font-family="{FONT}"><defs>{FONT_CSS}</defs>{body}</svg>')
 
 
-def page(h):
-    return f'<rect width="{W}" height="{h}" rx="12" fill="{PAGE}"/>'
-
-
-def slashes(x, y):
-    # the site's sand-gold slash marks
-    return "".join(f'<path d="M{x} {y + i * 26} l18 -8" stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>' for i in range(4))
+def logo(x, y, w, color):
+    return f'<svg x="{x}" y="{y}" width="{w}" height="{w * .75}" viewBox="0 0 800 600" color="{color}">{LOGO}</svg>'
 
 
 def banner():
@@ -118,64 +125,62 @@ def banner():
         f'<rect width="{W}" height="{h}" rx="14" fill="{CHARCOAL}"/>',
         f'<path d="M{W - 260} 0 H{W - 14} a14 14 0 0 1 14 14 V{h - 14} a14 14 0 0 1 -14 14 H{W - 420} Z" fill="{BLUE}"/>',
         f'<path d="M{W - 300} 0 L{W - 460} {h}" stroke="{GOLD}" stroke-width="3"/>',
-        slashes(40, 84),
-        f'<image x="{W - 230}" y="45" width="200" height="150" xlink:href="data:image/png;base64,{LOGO}" href="data:image/png;base64,{LOGO}"/>',
-        f'<text x="90" y="98" font-size="40" font-weight="800" fill="#ffffff">Adaa Consulting</text>',
-        f'<text x="90" y="138" font-size="24" font-weight="700" fill="{GOLD}">أداء للاستشارات</text>',
-        f'<text x="90" y="176" font-size="16" fill="#e5e5e5">Institutional development starts from within</text>',
-        f'<text x="90" y="202" font-size="15" fill="#bdbdbd">التطوير المؤسسي يبدأ من الداخل</text>',
+        "".join(f'<path d="M40 {84 + i * 26} l18 -8" stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>' for i in range(4)),
+        logo(W - 250, 30, 240, "#ffffff"),
+        f'<text x="90" y="100" font-size="40" font-weight="800" fill="#ffffff">Adaa Consulting</text>',
+        f'<text x="90" y="140" font-size="25" font-weight="700" fill="{GOLD}">أداء للاستشارات</text>',
+        f'<text x="90" y="178" font-size="16" fill="#e5e5e5">Institutional development starts from within</text>',
+        f'<text x="90" y="206" font-size="15" fill="#c4c4c4">التطوير المؤسسي يبدأ من الداخل</text>',
     ]
     return svg(h, "".join(body))
 
 
-def products():
-    cols, gap, pad, ch = 2, 16, 20, 150
-    cw = (W - pad * 2 - gap) // cols
+def products(t):
+    cols, gap, ch = 2, 16, 152
+    cw = (W - gap) // cols
     rows = (len(PRODUCTS) + 1) // cols
-    h = pad * 2 + rows * ch + (rows - 1) * gap
-    body = [page(h)]
+    h = rows * ch + (rows - 1) * gap + 2
+    body = []
     for i, (en, ar, desc, tech) in enumerate(PRODUCTS):
-        x = pad + (i % cols) * (cw + gap)
-        y = pad + (i // cols) * (ch + gap)
-        body.append(f'<rect x="{x}" y="{y}" width="{cw}" height="{ch}" rx="10" fill="{CARD}" stroke="{BORDER}"/>')
-        body.append(f'<rect x="{x + 18}" y="{y + 18}" width="26" height="26" rx="7" fill="{GOLD}"/>'
-                    f'<text x="{x + 31}" y="{y + 36}" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">{i + 1:02d}</text>')
-        body.append(f'<text x="{x + 54}" y="{y + 37}" font-size="16" font-weight="700" fill="{TEXT}">{esc(en)}</text>')
-        body.append(f'<text x="{x + cw - 18}" y="{y + 37}" text-anchor="end" font-size="14" font-weight="600" fill="{BLUE}">{esc(ar)}</text>')
+        x = 1 + (i % cols) * (cw + gap)
+        y = 1 + (i // cols) * (ch + gap)
+        body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{ch}" rx="10" fill="{t["card"]}" stroke="{t["border"]}"/>')
+        body.append(f'<rect x="{x + 18}" y="{y + 18}" width="28" height="28" rx="7" fill="{t["gold"]}"/>'
+                    f'<text x="{x + 32}" y="{y + 37}" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">{i + 1:02d}</text>')
+        body.append(f'<text x="{x + 56}" y="{y + 38}" font-size="16" font-weight="700" fill="{t["text"]}">{esc(en)}</text>')
+        body.append(f'<text x="{x + cw - 20}" y="{y + 38}" text-anchor="end" font-size="14" font-weight="700" fill="{t["blue"]}">{esc(ar)}</text>')
         for j, line in enumerate(wrap(desc, 56)[:2]):
-            body.append(f'<text x="{x + 18}" y="{y + 70 + j * 18}" font-size="13" fill="{MUTED}">{esc(line)}</text>')
-        body.append(chip_rows(x + 18, y + ch - 34, tech, x + cw - 18)[0])
+            body.append(f'<text x="{x + 18}" y="{y + 72 + j * 19}" font-size="13" fill="{t["muted"]}">{esc(line)}</text>')
+        body.append(chip_rows(t, x + 18, y + ch - 38, tech, x + cw - 20)[0])
     return svg(h, "".join(body))
 
 
-def clients():
-    pad = 24
-    body, y = [], pad
+def clients(t):
+    body, y = [], 0
     for title, ar, names, strong in (("Digital solutions delivered for", "حلول رقمية لـ", GOV_CLIENTS, True),
                                      ("Consulting clients", "عملاء الاستشارات", CONSULTING_CLIENTS, False)):
-        body.append(f'<text x="{pad}" y="{y + 14}" font-size="15" font-weight="700" fill="{BLUE}">{title}</text>')
-        body.append(f'<text x="{W - pad}" y="{y + 14}" text-anchor="end" font-size="14" font-weight="600" fill="{BLUE}">{esc(ar)}</text>')
-        s, y = chip_rows(pad, y + 28, names, W - pad, strong)
+        body.append(f'<text x="2" y="{y + 16}" font-size="15" font-weight="700" fill="{t["blue"]}">{title}</text>')
+        body.append(f'<text x="{W - 2}" y="{y + 16}" text-anchor="end" font-size="15" font-weight="700" fill="{t["blue"]}">{esc(ar)}</text>')
+        s, y = chip_rows(t, 1, y + 30, names, W - 1, strong)
         body.append(s)
         y += 30
-    h = y - 6
-    return svg(h, page(h) + "".join(body))
+    return svg(y - 26, "".join(body))
 
 
-def services():
-    cols, gap, pad, rh = 2, 12, 20, 48
-    cw = (W - pad * 2 - gap) // cols
+def services(t):
+    cols, gap, rh = 2, 12, 50
+    cw = (W - gap) // cols
     rows = (len(SERVICES) + 1) // cols
-    h = pad * 2 + rows * rh + (rows - 1) * gap
-    body = [page(h)]
+    h = rows * rh + (rows - 1) * gap + 2
+    body = []
     for i, (en, ar) in enumerate(SERVICES):
-        x = pad + (i % cols) * (cw + gap)
-        y = pad + (i // cols) * (rh + gap)
-        body.append(f'<rect x="{x}" y="{y}" width="{cw}" height="{rh}" rx="8" fill="{CARD}" stroke="{BORDER}"/>')
-        body.append(f'<rect x="{x + 14}" y="{y + 14}" width="20" height="20" rx="5" fill="{GOLD}"/>'
-                    f'<path d="M{x + 19} {y + 24} l4 4 l7 -8" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>')
-        body.append(f'<text x="{x + 44}" y="{y + 29}" font-size="14" font-weight="600" fill="{TEXT}">{esc(en)}</text>')
-        body.append(f'<text x="{x + cw - 16}" y="{y + 29}" text-anchor="end" font-size="13" fill="{MUTED}">{esc(ar)}</text>')
+        x = 1 + (i % cols) * (cw + gap)
+        y = 1 + (i // cols) * (rh + gap)
+        body.append(f'<rect x="{x}" y="{y}" width="{cw - 2}" height="{rh}" rx="8" fill="{t["card"]}" stroke="{t["border"]}"/>')
+        body.append(f'<rect x="{x + 14}" y="{y + 15}" width="20" height="20" rx="5" fill="{t["gold"]}"/>'
+                    f'<path d="M{x + 19} {y + 25} l4 4 l7 -8" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>')
+        body.append(f'<text x="{x + 44}" y="{y + 31}" font-size="14" font-weight="700" fill="{t["text"]}">{esc(en)}</text>')
+        body.append(f'<text x="{x + cw - 18}" y="{y + 31}" text-anchor="end" font-size="13" fill="{t["muted"]}">{esc(ar)}</text>')
     return svg(h, "".join(body))
 
 
@@ -184,19 +189,25 @@ def contact():
     body = [
         f'<rect width="{W}" height="{h}" rx="12" fill="{BLUE}"/>',
         f'<path d="M{W - 80} 0 L{W - 210} {h}" stroke="{GOLD}" stroke-width="3" opacity=".8"/>',
-        f'<text x="{W / 2}" y="52" text-anchor="middle" font-size="22" font-weight="700" fill="#ffffff">Ready to transform your organization?</text>',
+        f'<text x="{W / 2}" y="52" text-anchor="middle" font-size="23" font-weight="700" fill="#ffffff">Ready to transform your organization?</text>',
         f'<text x="{W / 2}" y="82" text-anchor="middle" font-size="16" fill="#dbe6fb">جاهزون لمرافقتكم في رحلة التحول المؤسسي والرقمي</text>',
         f'<text x="{W / 2}" y="108" text-anchor="middle" font-size="13" fill="{GOLD}">Abu Dhabi · Dubai · Fujairah · Riyadh</text>',
-        f'<rect x="{W / 2 - 120}" y="122" width="240" height="34" rx="8" fill="#ffffff"/>',
-        f'<text x="{W / 2}" y="144" text-anchor="middle" font-size="14" font-weight="700" fill="{BLUE}">info@adaaconsulting.ae  →</text>',
+        f'<rect x="{W / 2 - 125}" y="120" width="250" height="36" rx="8" fill="#ffffff"/>',
+        f'<text x="{W / 2}" y="143" text-anchor="middle" font-size="14" font-weight="700" fill="{BLUE}">info@adaaconsulting.ae  →</text>',
     ]
     return svg(h, "".join(body))
 
 
 if __name__ == "__main__":
-    out = Path(__file__).resolve().parent.parent / "profile" / "brand"
-    for name, content in (("banner.svg", banner()), ("products.svg", products()),
-                          ("clients.svg", clients()), ("services.svg", services()), ("contact.svg", contact())):
+    out = HERE.parent / "profile" / "brand"
+    files = {"banner.svg": banner(), "contact.svg": contact()}
+    for theme, t in THEMES.items():
+        files[f"products-{theme}.svg"] = products(t)
+        files[f"clients-{theme}.svg"] = clients(t)
+        files[f"services-{theme}.svg"] = services(t)
+    for old in out.glob("*.svg"):
+        old.unlink()
+    for name, content in files.items():
         minidom.parseString(content)  # self-check: invalid XML (e.g. a bare &) silently breaks the image on GitHub
         (out / name).write_text(content, encoding="utf-8")
         print("wrote", out / name)
