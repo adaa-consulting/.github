@@ -30,8 +30,8 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
 </picture>
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="brand/clients-dark.svg"/>
-  <img src="brand/clients-light.svg" width="100%" alt="Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/consulting-dark.svg"/>
+  <img src="brand/consulting-light.svg" width="100%" alt="Consulting clients: Dubai Electricity and Water Authority, Dubai Municipality, Ministry of Interior, Dubai Police, Abu Dhabi Police, TDRA, Etihad Water and Electricity."/>
 </picture>
 
 ### Consulting Expertise

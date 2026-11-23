@@ -185,7 +185,7 @@ def it_clients(t):
         if data:
             body.append(f'<image x="{x + 20}" y="{y + 14}" width="{cw - 42}" height="84" preserveAspectRatio="xMidYMid meet" href="{data}"/>')
         else:  # shortcut: text fallback when a logo file is missing; add scripts/clients/<key>.png to fix
-            body.append(f'<text x="{x + cw / 2}" y="{y + 64}" text-anchor="middle" font-size="22" font-weight="800" fill="{BLUE}">{esc(ar)}</text>')
+            body.append(f'<text x="{x + cw / 2}" y="{y + 64}" text-anchor="middle" font-size="17" font-weight="800" fill="{BLUE}">{esc(ar)}</text>')
         body.append(f'<line x1="{x + 24}" y1="{y + 110}" x2="{x + cw - 26}" y2="{y + 110}" stroke="#ececec"/>')
         body.append(f'<text x="{x + cw / 2}" y="{y + 132}" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">{esc(en)}</text>')
         body.append(f'<text x="{x + cw / 2}" y="{y + 153}" text-anchor="middle" font-size="12" font-weight="600" fill="{BLUE}">{esc(ar)}</text>')
@@ -236,7 +236,7 @@ if __name__ == "__main__":
     files = {"hero.svg": banner(), "cta.svg": contact()}
     for theme, t in THEMES.items():
         files[f"products-{theme}.svg"] = products(t)
-        files[f"clients-{theme}.svg"] = clients(t)
+        files[f"consulting-{theme}.svg"] = clients(t)
         files[f"it-clients-{theme}.svg"] = it_clients(t)
         files[f"services-{theme}.svg"] = services(t)
     for old in out.glob("*.svg"):
