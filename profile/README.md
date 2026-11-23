@@ -25,8 +25,8 @@ Our engineering team designs, builds, and runs the platforms our clients depend 
 ### Our Technology Clients
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="brand/logos-dark.svg"/>
-  <img src="brand/logos-light.svg" width="100%" alt="Technology clients: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority, Fujairah Foundation for Regions Development, Human Resources Department – Government of Fujairah, Al Badr Initiative, Fujairah Equestrian Championships."/>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/client-wall-dark.svg"/>
+  <img src="brand/client-wall-light.svg" width="100%" alt="Technology clients: Crown Prince's Office – Fujairah, Fujairah Government Excellence Program, Fujairah Chamber of Commerce and Industry, Fujairah Customs Department, Fujairah Tourism and Antiquities Authority, Fujairah Foundation for Regions Development, Human Resources Department – Government of Fujairah, Al Badr Initiative, Fujairah International Arabian Horse Championship."/>
 </picture>
 
 <picture>
